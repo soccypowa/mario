@@ -38,11 +38,11 @@ public class Window {
     switch (newScene) {
       case 0:
         currentScene = new LevelEditorScene();
-        // currentScene.init();
+        currentScene.init();
         break;
       case 1:
         currentScene = new LevelScene();
-        // currentScene.int();
+        currentScene.init();
         break;
       default:
         assert false : "Unknown Scene: '" + newScene + "'";
@@ -84,10 +84,15 @@ public class Window {
 
     // Configure GLFW
     glfwDefaultWindowHints();
-    ;
+
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+    // These need to be added on macos version above 10.13
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create the window
     glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
