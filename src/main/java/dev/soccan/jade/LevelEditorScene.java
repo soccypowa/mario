@@ -10,6 +10,7 @@ import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 import dev.soccan.renderer.Shader;
+import dev.soccan.util.Time;
 
 public class LevelEditorScene extends Scene {
 
@@ -82,6 +83,7 @@ public class LevelEditorScene extends Scene {
         defaultShader.use();
         defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTime());
         // Bind our VAO
         glBindVertexArray(vaoID);
         // Enable Vertex attribute pointers
