@@ -9,6 +9,7 @@ import java.nio.IntBuffer;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
+import dev.soccan.components.SpriteRenderer;
 import dev.soccan.renderer.Shader;
 import dev.soccan.renderer.Texture;
 import dev.soccan.util.Time;
@@ -35,11 +36,19 @@ public class LevelEditorScene extends Scene {
     private Shader defaultShader;
     private Texture testTexture;
 
+    GameObject testObj;
+    private boolean firstTime = false;
+
     public LevelEditorScene() {
     }
 
     @Override
     public void init() {
+        System.out.println("Creating testobject");
+        this.testObj = new GameObject("testObject");
+        this.testObj.addComponent(new SpriteRenderer());
+        this.addGameObjectToScene(this.testObj);
+
         this.camera = new Camera(new Vector2f());
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compile();
@@ -111,6 +120,18 @@ public class LevelEditorScene extends Scene {
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
         defaultShader.detach();
+
+        if (!firstTime) {
+            System.out.println("Creating another game object!");
+            GameObject go = new GameObject("Game test 2");
+            go.addComponent(new SpriteRenderer());
+            this.addGameObjectToScene(go);
+            firstTime = true;
+        }
+
+        for (GameObject go : this.gameObjects) {
+            go.update(dt);
+        }
     }
 
 }
