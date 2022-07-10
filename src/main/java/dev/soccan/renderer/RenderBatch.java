@@ -64,7 +64,7 @@ public class RenderBatch {
         glBindVertexArray(vaoID);
 
         // Allocate space for our vertices
-        vboID = glGenFramebuffers();
+        vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertices.length * Float.BYTES, GL_DYNAMIC_DRAW);
 

@@ -3,8 +3,6 @@ package dev.soccan.renderer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.NullCipher;
-
 import dev.soccan.components.SpriteRenderer;
 import dev.soccan.jade.GameObject;
 
