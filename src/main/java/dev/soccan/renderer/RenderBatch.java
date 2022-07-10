@@ -23,6 +23,7 @@ import org.joml.Vector4f;
 
 import dev.soccan.components.SpriteRenderer;
 import dev.soccan.jade.Window;
+import dev.soccan.util.AssetPool;
 
 public class RenderBatch {
     // Vertex
@@ -46,8 +47,7 @@ public class RenderBatch {
     private Shader shader;
 
     public RenderBatch(int maxBatchSize) {
-        shader = new Shader("assets/shaders/default.glsl");
-        shader.compile();
+        shader = AssetPool.getShader("assets/shaders/default.glsl");
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
 
