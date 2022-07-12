@@ -1,6 +1,5 @@
 package dev.soccan.jade;
 
-import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -61,8 +60,6 @@ public class Window {
   }
 
   public void run() {
-    System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
     init();
     loop();
 
