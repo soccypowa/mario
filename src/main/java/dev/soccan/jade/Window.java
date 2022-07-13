@@ -24,9 +24,9 @@ public class Window {
     this.width = 1920;
     this.height = 1080;
     this.title = "Mario";
-    r = 0.7f;
-    g = 0.2f;
-    b = 0.1f;
+    r = 1;
+    g = 1;
+    b = 1;
     a = 1;
   }
 
@@ -116,6 +116,9 @@ public class Window {
 
     // This row is very important because a very long text on their site!
     GL.createCapabilities();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
     Window.changeScene(0);
   }
