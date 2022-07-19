@@ -2,11 +2,15 @@ package dev.soccan.jade;
 
 import imgui.flag.*;
 import imgui.callback.*;
+import imgui.ImFontAtlas;
+import imgui.ImFontConfig;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
 
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
+import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class ImGuiLayer {
@@ -16,6 +20,7 @@ public class ImGuiLayer {
 
     // LWJGL3 renderer (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+    private final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
 
     public ImGuiLayer(long glfwWindow) {
         this.glfwWindow = glfwWindow;
@@ -142,58 +147,24 @@ public class ImGuiLayer {
         // Fonts configuration
         // Read: https://raw.githubusercontent.com/ocornut/imgui/master/docs/FONTS.txt
 
-        // final ImFontAtlas fontAtlas = io.getFonts();
-        // final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated
-        // object, should be explicitly destroyed
+        // Typ som macens typsnittsbok
+        final ImFontAtlas fontAtlas = io.getFonts();
+        final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
 
-        // // Glyphs could be added per-font as well as per config used globally like
-        // here
-        // fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
+        // Glyphs could be added per-font as well as per config used globally like here
+        fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesDefault());
 
-        // // Add a default font, which is 'ProggyClean.ttf, 13px'
-        // fontAtlas.addFontDefault();
+        // previously added font
+        fontConfig.setPixelSnapH(true);
+        fontAtlas.addFontFromFileTTF("assets/fonts/segoeui.ttf", 32, fontConfig);
 
-        // // Fonts merge example
-        // fontConfig.setMergeMode(true); // When enabled, all fonts added with this
-        // config would be merged with the
-        // // previously added font
-        // fontConfig.setPixelSnapH(true);
-
-        // fontAtlas.addFontFromMemoryTTF(loadFromResources("basis33.ttf"), 16,
-        // fontConfig);
-
-        // fontConfig.setMergeMode(false);
-        // fontConfig.setPixelSnapH(false);
-
-        // // Fonts from file/memory example
-        // // We can add new fonts from the file system
-        // fontAtlas.addFontFromFileTTF("src/test/resources/Righteous-Regular.ttf", 14,
-        // fontConfig);
-        // fontAtlas.addFontFromFileTTF("src/test/resources/Righteous-Regular.ttf", 16,
-        // fontConfig);
-
-        // // Or directly from the memory
-        // fontConfig.setName("Roboto-Regular.ttf, 14px"); // This name will be
-        // displayed in Style Editor
-        // fontAtlas.addFontFromMemoryTTF(loadFromResources("Roboto-Regular.ttf"), 14,
-        // fontConfig);
-        // fontConfig.setName("Roboto-Regular.ttf, 16px"); // We can apply a new config
-        // value every time we add a new font
-        // fontAtlas.addFontFromMemoryTTF(loadFromResources("Roboto-Regular.ttf"), 16,
-        // fontConfig);
-
-        // fontConfig.destroy(); // After all fonts were added we don't need this config
-        // more
-
-        // ------------------------------------------------------------
-        // Use freetype instead of stb_truetype to build a fonts texture
-        // ImGuiFreeType.buildFontAtlas(fontAtlas,
-        // ImGuiFreeType.RasterizerFlags.LightHinting);
+        fontConfig.destroy(); // After all fonts were added we don't need this config more
 
         // Method initializes LWJGL3 renderer.
         // This method SHOULD be called after you've initialized your ImGui
         // configuration (fonts and so on).
         // ImGui context should be created as well.
+        imGuiGlfw.init(glfwWindow, false);
         imGuiGl3.init("#version 330 core");
     }
 
@@ -201,35 +172,18 @@ public class ImGuiLayer {
         startFrame(dt);
 
         // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
-        ImGui.newFrame();
         ImGui.showDemoWindow();
-        ImGui.render();
 
         endFrame();
     }
 
     private void startFrame(final float deltaTime) {
-        double[] mousePosX = { 0 };
-        double[] mousePosY = { 0 };
-        float[] winWidth = { Window.getWidth() };
-        float[] winHeight = { Window.getHeight() };
-        // Get window properties and mouse position
-        glfwGetCursorPos(glfwWindow, mousePosX, mousePosY);
-
-        // We SHOULD call those methods to update Dear ImGui state for the current frame
-        final ImGuiIO io = ImGui.getIO();
-        io.setDisplaySize(winWidth[0], winHeight[0]);
-        io.setDisplayFramebufferScale(1f, 1f);
-        io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);
-        io.setDeltaTime(deltaTime);
-
-        // Update the mouse cursor
-        final int imguiCursor = ImGui.getMouseCursor();
-        glfwSetCursor(glfwWindow, mouseCursors[imguiCursor]);
-        glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        imGuiGlfw.newFrame();
+        ImGui.newFrame();
     }
 
     private void endFrame() {
+        ImGui.render();
         // After Dear ImGui prepared a draw data, we use it in the LWJGL3 renderer.
         // At that moment ImGui will be rendered to the current OpenGL context.
         imGuiGl3.renderDrawData(ImGui.getDrawData());

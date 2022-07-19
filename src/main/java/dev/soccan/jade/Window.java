@@ -22,8 +22,8 @@ public class Window {
   private static Scene currentScene;
 
   private Window() {
-    this.width = 1680;
-    this.height = 1050;
+    this.width = 1920;
+    this.height = 1080;
     this.title = "Mario";
     r = 1;
     g = 1;
@@ -106,10 +106,10 @@ public class Window {
     glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
     glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
     glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
-    glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
-      Window.setWidth(newWidth);
-      Window.setHeight(newHeight);
-    });
+    // glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
+    // Window.setWidth(newWidth);
+    // Window.setHeight(newHeight);
+    // });
 
     // Make OpenGL the context current
     glfwMakeContextCurrent(glfwWindow);
@@ -155,11 +155,11 @@ public class Window {
   }
 
   public static int getWidth() {
-    return get().width;
+    return Window.get().width;
   }
 
   public static int getHeight() {
-    return get().height;
+    return Window.get().height;
   }
 
   private static void setWidth(int newWidth) {
