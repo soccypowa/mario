@@ -36,7 +36,7 @@ public class ImGuiLayer {
         // Initialize ImGuiIO config
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename(null); // We don't want to save .ini file
+        io.setIniFilename("imgui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
@@ -156,7 +156,7 @@ public class ImGuiLayer {
 
         // previously added font
         fontConfig.setPixelSnapH(true);
-        fontAtlas.addFontFromFileTTF("assets/fonts/segoeui.ttf", 32, fontConfig);
+        fontAtlas.addFontFromFileTTF("assets/fonts/segoeui.ttf", 16, fontConfig);
 
         fontConfig.destroy(); // After all fonts were added we don't need this config more
 
@@ -168,10 +168,10 @@ public class ImGuiLayer {
         imGuiGl3.init("#version 330 core");
     }
 
-    public void update(float dt) {
+    public void update(float dt, Scene currentScene) {
         startFrame(dt);
 
-        // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
+        currentScene.sceneImGui();
         ImGui.showDemoWindow();
 
         endFrame();
