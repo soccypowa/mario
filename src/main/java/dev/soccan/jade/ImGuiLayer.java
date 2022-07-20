@@ -9,8 +9,6 @@ import imgui.ImGuiIO;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 
-import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
-import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class ImGuiLayer {
