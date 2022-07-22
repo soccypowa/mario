@@ -1,6 +1,7 @@
 package dev.soccan.scenes;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import dev.soccan.components.MouseControls;
@@ -13,6 +14,7 @@ import dev.soccan.jade.GameObject;
 import dev.soccan.jade.MouseListener;
 import dev.soccan.jade.Prefabs;
 import dev.soccan.jade.Transform;
+import dev.soccan.renderer.DebugDraw;
 import dev.soccan.util.AssetPool;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -31,6 +33,7 @@ public class LevelEditorScene extends Scene {
         loadResources();
         this.camera = new Camera(new Vector2f(-250, 0));
         sprites = AssetPool.getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
+
         if (levelLoaded) {
             this.activeGameObject = gameObjects.get(1);
             return;
@@ -51,6 +54,7 @@ public class LevelEditorScene extends Scene {
         obj1.addComponent(new RigidBody());
         this.addGameObjectToScene(obj1);
         this.activeGameObject = obj1;
+
     }
 
     private void loadResources() {

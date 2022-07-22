@@ -3,6 +3,7 @@ package dev.soccan.jade;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import dev.soccan.renderer.DebugDraw;
 import dev.soccan.scenes.LevelEditorScene;
 import dev.soccan.scenes.LevelScene;
 import dev.soccan.scenes.Scene;
@@ -142,11 +143,14 @@ public class Window {
       // Poll events
       glfwPollEvents();
 
+      DebugDraw.beginFrame();
+
       glClearColor(r, g, b, a);
       glClear(GL_COLOR_BUFFER_BIT);
 
       if (dt >= 0) {
-        currentScene.update(dt);
+        DebugDraw.draw(); // This makes it behind everything (makes sense)
+        currentScene.update(dt); // Because here is where we draw the rest
       }
       this.imGuiLayer.update(dt, currentScene);
       glfwSwapBuffers(glfwWindow);
