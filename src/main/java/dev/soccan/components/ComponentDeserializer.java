@@ -1,4 +1,4 @@
-package dev.soccan.jade;
+package dev.soccan.components;
 
 import java.lang.reflect.Type;
 

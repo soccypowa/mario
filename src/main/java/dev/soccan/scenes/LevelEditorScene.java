@@ -1,12 +1,18 @@
-package dev.soccan.jade;
+package dev.soccan.scenes;
 
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import dev.soccan.components.MouseControls;
 import dev.soccan.components.RigidBody;
 import dev.soccan.components.Sprite;
 import dev.soccan.components.SpriteRenderer;
 import dev.soccan.components.SpriteSheet;
+import dev.soccan.jade.Camera;
+import dev.soccan.jade.GameObject;
+import dev.soccan.jade.MouseListener;
+import dev.soccan.jade.Prefabs;
+import dev.soccan.jade.Transform;
 import dev.soccan.util.AssetPool;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -15,6 +21,7 @@ public class LevelEditorScene extends Scene {
 
     private GameObject obj1;
     private SpriteSheet sprites;
+    MouseControls mouseControls = new MouseControls();
 
     public LevelEditorScene() {
     }
@@ -58,7 +65,7 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
-        MouseListener.getOrthoX();
+        mouseControls.update(dt);
 
         for (GameObject go : this.gameObjects) {
             go.update(dt);
@@ -88,7 +95,10 @@ public class LevelEditorScene extends Scene {
             ImGui.pushID(i);
             if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[0].x, texCoords[0].y, texCoords[2].x,
                     texCoords[2].y)) {
-                System.out.println("Button " + i + " clicked");
+                GameObject object = Prefabs.generateSpriteObject(sprite, spriteWidth, spriteHeight);
+                // Attach this to the mouse cursor
+                mouseControls.pickupObject(object);
+
             }
             ImGui.popID();
 

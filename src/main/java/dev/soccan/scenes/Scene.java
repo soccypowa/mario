@@ -1,4 +1,4 @@
-package dev.soccan.jade;
+package dev.soccan.scenes;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,6 +10,11 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import dev.soccan.components.Component;
+import dev.soccan.components.ComponentDeserializer;
+import dev.soccan.jade.Camera;
+import dev.soccan.jade.GameObject;
+import dev.soccan.jade.GameObjectDeserializer;
 import dev.soccan.renderer.Renderer;
 import imgui.ImGui;
 
@@ -95,10 +100,26 @@ public abstract class Scene {
         }
 
         if (!inFile.equals("")) {
+            int maxGoId = -1;
+            int maxCompId = -1;
             GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
             for (int i = 0; i < objs.length; i++) {
                 addGameObjectToScene(objs[i]);
+
+                for (Component c : objs[i].getAllComponents()) {
+                    if (c.getUid() > maxCompId) {
+                        maxCompId = c.getUid();
+                    }
+                }
+                if (objs[i].getUid() > maxGoId) {
+                    maxGoId = objs[i].getUid();
+                }
             }
+
+            maxGoId++;
+            maxCompId++;
+            GameObject.init(maxGoId);
+            Component.init(maxCompId);
             this.levelLoaded = true;
         }
     }

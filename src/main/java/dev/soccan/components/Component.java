@@ -1,4 +1,4 @@
-package dev.soccan.jade;
+package dev.soccan.components;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -6,9 +6,13 @@ import java.lang.reflect.Modifier;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import dev.soccan.jade.GameObject;
 import imgui.ImGui;
 
 public abstract class Component {
+
+    private static int ID_COUNTER = 0;
+    private int uid = -1;
 
     public transient GameObject gameObject = null;
 
@@ -75,5 +79,19 @@ public abstract class Component {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void generateId() {
+        if (this.uid == -1) {
+            this.uid = ID_COUNTER++;
+        }
+    }
+
+    public int getUid() {
+        return this.uid;
+    }
+
+    public static void init(int maxId) {
+        ID_COUNTER = maxId;
     }
 }

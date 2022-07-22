@@ -11,6 +11,8 @@ import imgui.glfw.ImGuiImplGlfw;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import dev.soccan.scenes.Scene;
+
 public class ImGuiLayer {
     private long glfwWindow;
     // Mouse cursors provided by GLFW
@@ -93,12 +95,17 @@ public class ImGuiLayer {
             io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
             io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
             io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+
+            if (!io.getWantCaptureKeyboard()) {
+                KeyListener.keyCallback(w, key, scancode, action, mods);
+            }
         });
 
         glfwSetCharCallback(glfwWindow, (w, c) -> {
             if (c != GLFW_KEY_DELETE) {
                 io.addInputCharacter(c);
             }
+
         });
 
         glfwSetMouseButtonCallback(glfwWindow, (w, button, action, mods) -> {
@@ -112,6 +119,9 @@ public class ImGuiLayer {
 
             io.setMouseDown(mouseDown);
 
+            if (!io.getWantCaptureMouse()) {
+                MouseListener.mouseButtonCallback(w, button, action, mods);
+            }
             if (!io.getWantCaptureMouse() && mouseDown[1]) {
                 ImGui.setWindowFocus(null);
             }

@@ -3,6 +3,10 @@ package dev.soccan.jade;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import dev.soccan.scenes.LevelEditorScene;
+import dev.soccan.scenes.LevelScene;
+import dev.soccan.scenes.Scene;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;

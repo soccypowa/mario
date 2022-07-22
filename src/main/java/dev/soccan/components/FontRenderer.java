@@ -1,7 +1,5 @@
 package dev.soccan.components;
 
-import dev.soccan.jade.Component;
-
 public class FontRenderer extends Component {
 
     @Override

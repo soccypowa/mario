@@ -1,4 +1,4 @@
-package dev.soccan.jade;
+package dev.soccan.scenes;
 
 public class LevelScene extends Scene {
 

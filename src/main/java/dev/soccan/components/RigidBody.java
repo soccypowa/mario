@@ -3,8 +3,6 @@ package dev.soccan.components;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import dev.soccan.jade.Component;
-
 public class RigidBody extends Component {
     private int colliderType = 0;
     private float friction = 0.8f;

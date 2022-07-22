@@ -3,7 +3,6 @@ package dev.soccan.components;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import dev.soccan.jade.Component;
 import dev.soccan.jade.Transform;
 import dev.soccan.renderer.Texture;
 import imgui.ImGui;
