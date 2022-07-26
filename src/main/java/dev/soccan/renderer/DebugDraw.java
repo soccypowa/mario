@@ -177,18 +177,18 @@ public class DebugDraw {
     }
 
     // ======================
-    // Add circle2D methods
+    // Add circle methods
     // ======================
 
-    public static void addCircle2D(Vector2f center, float radius) {
-        addCircle2D(center, radius, new Vector3f(0, 1, 0), 1);
+    public static void addCircle(Vector2f center, float radius) {
+        addCircle(center, radius, new Vector3f(0, 1, 0), 1);
     }
 
-    public static void addCircle2D(Vector2f center, float radius, Vector3f color) {
-        addCircle2D(center, radius, color, 1);
+    public static void addCircle(Vector2f center, float radius, Vector3f color) {
+        addCircle(center, radius, color, 1);
     }
 
-    public static void addCircle2D(Vector2f center, float radius, Vector3f color, int lifetime) {
+    public static void addCircle(Vector2f center, float radius, Vector3f color, int lifetime) {
         Vector2f[] points = new Vector2f[20];
         int increment = 360 / points.length;
         int currentAngle = 0;

@@ -2,13 +2,10 @@ package dev.soccan.scenes;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import dev.soccan.components.GridLines;
 import dev.soccan.components.MouseControls;
-import dev.soccan.components.RigidBody;
 import dev.soccan.components.Sprite;
-import dev.soccan.components.SpriteRenderer;
 import dev.soccan.components.SpriteSheet;
 import dev.soccan.jade.Camera;
 import dev.soccan.jade.GameObject;
@@ -77,7 +74,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float dt) {
         levelEditorStuff.update(dt);
-        DebugDraw.addCircle2D(new Vector2f(x, y), 64, new Vector3f(0, 1, 0), 1);
+        DebugDraw.addCircle(new Vector2f(x, y), 64, new Vector3f(0, 1, 0), 1);
         x += 50f * dt;
         y += 50f * dt;
 
