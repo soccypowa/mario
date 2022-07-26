@@ -1,6 +1,7 @@
 package dev.soccan.scenes;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import dev.soccan.components.GridLines;
@@ -13,6 +14,7 @@ import dev.soccan.jade.Camera;
 import dev.soccan.jade.GameObject;
 import dev.soccan.jade.Prefabs;
 import dev.soccan.jade.Transform;
+import dev.soccan.renderer.DebugDraw;
 import dev.soccan.util.AssetPool;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -69,9 +71,15 @@ public class LevelEditorScene extends Scene {
         AssetPool.getTexture("assets/images/blendimage2.png");
     }
 
+    float x = 0.0f;
+    float y = 0.0f;
+
     @Override
     public void update(float dt) {
         levelEditorStuff.update(dt);
+        DebugDraw.addCircle2D(new Vector2f(x, y), 64, new Vector3f(0, 1, 0), 1);
+        x += 50f * dt;
+        y += 50f * dt;
 
         for (GameObject go : this.gameObjects) {
             go.update(dt);
