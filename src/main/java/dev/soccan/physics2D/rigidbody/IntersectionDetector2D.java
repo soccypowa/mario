@@ -1,11 +1,14 @@
 package dev.soccan.physics2D.rigidbody;
 
+import java.util.Vector;
+
 import org.joml.Vector2f;
 
 import dev.soccan.physics2D.primitives.AABB;
 import dev.soccan.physics2D.primitives.Box2D;
 import dev.soccan.physics2D.primitives.Circle;
 import dev.soccan.renderer.Line2D;
+import dev.soccan.util.JMath;
 
 public class IntersectionDetector2D {
     // ====================
@@ -13,7 +16,7 @@ public class IntersectionDetector2D {
     // ====================
 
     public static boolean pointOnLIne(Vector2f point, Line2D line) {
-        float dy = line.getEnd().y - line.getStart().y
+        float dy = line.getEnd().y - line.getStart().y;
         float dx = line.getEnd().x - line.getStart().x;
         float m = dy / dx;
 
@@ -38,7 +41,15 @@ public class IntersectionDetector2D {
     }
 
     public static boolean pointInBox2D(Vector2f point, Box2D box) {
+        // Translate teh point into local space
+        Vector2f pointLocalBoxSpace = new Vector2f(point);
+        JMath.rotate(pointLocalBoxSpace, box.getRigidbody().getRotation(), box.getRigidbody().getPosition());
 
+        Vector2f min = box.getMin();
+        Vector2f max = box.getMax();
+
+        return pointLocalBoxSpace.x <= max.x && min.x <= pointLocalBoxSpace.x && pointLocalBoxSpace.y <= max.y
+                && min.y <= pointLocalBoxSpace.y;
     }
 
     // ====================
