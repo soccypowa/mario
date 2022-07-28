@@ -5,6 +5,8 @@ import org.joml.Vector2f;
 import dev.soccan.physics2D.primitives.AABB;
 import dev.soccan.physics2D.primitives.Box2D;
 import dev.soccan.physics2D.primitives.Circle;
+import dev.soccan.physics2D.primitives.Ray2D;
+import dev.soccan.physics2D.primitives.RaycastResult;
 import dev.soccan.renderer.Line2D;
 import dev.soccan.util.JMath;
 
@@ -123,4 +125,35 @@ public class IntersectionDetector2D {
     // ====================
     // Ray vs Primitive tests (Raycasting)
     // ====================
+    public static boolean rayCast(Circle circle, Ray2D ray, RaycastResult result) {
+        RaycastResult.reset(result);
+
+        Vector2f originToCircle = new Vector2f(circle.getCenter()).sub(ray.getOrigin());
+        float radiusSquared = circle.getRadius() * circle.getRadius();
+        float originToCircleLengthSquared = originToCircle.lengthSquared();
+
+        // Project the vector from the ray onto the direction of the ray
+        float a = originToCircle.dot(ray.getDirection());
+        float bSq = originToCircleLengthSquared - (a * a);
+        if (radiusSquared - bSq < 0.0f) {
+            return false;
+        }
+
+        float f = (float) Math.sqrt(radiusSquared - bSq);
+        float t = 0;
+        if (originToCircleLengthSquared < radiusSquared) {
+            // Ray starts inside the circle
+            t = a + f;
+        } else {
+            t = a - f;
+        }
+        if (result != null) {
+            Vector2f point = new Vector2f(ray.getOrigin()).add(ray.getDirection().mul(t));
+            Vector2f normal = new Vector2f(point).sub(circle.getCenter());
+            normal.normalize();
+
+            result.init(point, normal, t, true);
+        }
+        return true;
+    }
 }
