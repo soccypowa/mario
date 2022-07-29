@@ -1,5 +1,7 @@
 package dev.soccan.physics2D.rigidbody;
 
+import javax.print.attribute.standard.Sides;
+
 import org.joml.Vector2f;
 
 import dev.soccan.physics2D.primitives.AABB;
@@ -109,12 +111,12 @@ public class IntersectionDetector2D {
     }
 
     public static boolean lineAndBox2D(Line2D line, Box2D box) {
-        float theta = -box.getRigidbody().getRotation();
+        float rotation = -box.getRigidbody().getRotation();
         Vector2f center = box.getRigidbody().getPosition();
         Vector2f localLineStart = new Vector2f(line.getStart());
         Vector2f localLineEnd = new Vector2f(line.getEnd());
-        JMath.rotate(localLineStart, theta, center);
-        JMath.rotate(localLineEnd, theta, center);
+        JMath.rotate(localLineStart, rotation, center);
+        JMath.rotate(localLineEnd, rotation, center);
 
         Line2D localLine = new Line2D(localLineStart, localLineEnd);
         AABB aabb = new AABB(box.getMin(), box.getMax());
@@ -125,7 +127,7 @@ public class IntersectionDetector2D {
     // ====================
     // Ray vs Primitive tests (Raycasting)
     // ====================
-    public static boolean rayCast(Circle circle, Ray2D ray, RaycastResult result) {
+    public static boolean raycast(Circle circle, Ray2D ray, RaycastResult result) {
         RaycastResult.reset(result);
 
         Vector2f originToCircle = new Vector2f(circle.getCenter()).sub(ray.getOrigin());
@@ -148,8 +150,88 @@ public class IntersectionDetector2D {
             t = a - f;
         }
         if (result != null) {
-            Vector2f point = new Vector2f(ray.getOrigin()).add(ray.getDirection().mul(t));
+            Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection()).mul(t));
             Vector2f normal = new Vector2f(point).sub(circle.getCenter());
+            normal.normalize();
+
+            result.init(point, normal, t, true);
+        }
+        return true;
+    }
+
+    public static boolean raycast(AABB box, Ray2D ray, RaycastResult result) {
+        RaycastResult.reset(result);
+        Vector2f unitVector = ray.getDirection();
+        unitVector.normalize();
+        unitVector.x = (unitVector.x != 0) ? 1.0f / unitVector.x : 0f;
+        unitVector.y = (unitVector.y != 0) ? 1.0f / unitVector.y : 0f;
+
+        Vector2f min = box.getMin();
+        min.sub(ray.getOrigin()).mul(unitVector);
+        Vector2f max = box.getMax();
+        max.sub(ray.getOrigin()).mul(unitVector);
+
+        float tmin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
+        float tmax = Math.min(Math.max(min.x, max.x), Math.max(min.y, max.y));
+
+        if (tmax < 0 || tmin > tmax) {
+            return false;
+        }
+
+        float t = (tmin < 0f) ? tmax : tmin;
+        boolean hit = t > 0f; // && t * t < ray.getMaximum();
+        if (!hit) {
+            return false;
+        }
+        if (result != null) {
+            Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection()).mul(t));
+            Vector2f normal = new Vector2f(ray.getOrigin()).sub(point);
+            normal.normalize();
+
+            result.init(point, normal, t, true);
+        }
+        return true;
+    }
+
+    public static boolean raycast(Box2D box, Ray2D ray, RaycastResult result) {
+        RaycastResult.reset(result);
+
+        Vector2f size = box.getHalfSize();
+        Vector2f xAxis = new Vector2f(1, 0);
+        Vector2f yAxis = new Vector2f(0, 1);
+        JMath.rotate(xAxis, -box.getRigidbody().getRotation(), new Vector2f(0, 0));
+        JMath.rotate(yAxis, -box.getRigidbody().getRotation(), new Vector2f(0, 0));
+
+        Vector2f p = new Vector2f(box.getRigidbody().getPosition()).sub(ray.getOrigin());
+        // Project the direction of the ray onto each axis of the box
+        Vector2f f = new Vector2f(xAxis.dot(ray.getDirection()), yAxis.dot(ray.getDirection()));
+
+        // Next, project p onto every axis of the box
+        Vector2f e = new Vector2f(xAxis.dot(p), yAxis.dot(p));
+
+        float[] tArray = { 0, 0, 0, 0 };
+        for (int i = 0; i < 2; i++) {
+            if (JMath.compare(f.get(i), 0)) {
+                // If ray is parallel, and origin is not in box, no hit
+                if (-e.get(i) - size.get(i) > 0 || -e.get(i) + size.get(i) < 0) {
+                    return false;
+                }
+                f.setComponent(i, Float.MIN_VALUE);
+            }
+            tArray[i * 2 + 0] = (e.get(i) + size.get(i)) / f.get(i); // tmax for this axis
+            tArray[i * 2 + 1] = (e.get(i) - size.get(i)) / f.get(i); // tmin for this axis
+        }
+        float tmin = Math.max(Math.min(tArray[0], tArray[1]), Math.min(tArray[2], tArray[3]));
+        float tmax = Math.min(Math.max(tArray[0], tArray[1]), Math.max(tArray[2], tArray[3]));
+
+        float t = (tmin < 0f) ? tmax : tmin;
+        boolean hit = t > 0f; // && t * t < ray.getMaximum();
+        if (!hit) {
+            return false;
+        }
+        if (result != null) {
+            Vector2f point = new Vector2f(ray.getOrigin()).add(new Vector2f(ray.getDirection()).mul(t));
+            Vector2f normal = new Vector2f(ray.getOrigin()).sub(point);
             normal.normalize();
 
             result.init(point, normal, t, true);
