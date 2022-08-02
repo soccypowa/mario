@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
 import dev.soccan.renderer.DebugDraw;
+import dev.soccan.renderer.FrameBuffer;
 import dev.soccan.scenes.LevelEditorScene;
 import dev.soccan.scenes.LevelScene;
 import dev.soccan.scenes.Scene;
@@ -19,6 +20,7 @@ public class Window {
   private String title;
   private long glfwWindow;
   private ImGuiLayer imGuiLayer;
+  private FrameBuffer frameBuffer;
 
   public float r, g, b, a;
 
@@ -131,6 +133,9 @@ public class Window {
     this.imGuiLayer = new ImGuiLayer(glfwWindow);
     this.imGuiLayer.initImGui();
 
+    // FIXME: Will in the future query to get this size automatically
+    this.frameBuffer = new FrameBuffer(3840, 2160);
+
     Window.changeScene(0);
   }
 
@@ -148,10 +153,15 @@ public class Window {
       glClearColor(r, g, b, a);
       glClear(GL_COLOR_BUFFER_BIT);
 
+      this.frameBuffer.bind();
+
       if (dt >= 0) {
         DebugDraw.draw(); // This makes it behind everything (makes sense)
         currentScene.update(dt); // Because here is where we draw the rest
       }
+
+      this.frameBuffer.unbind();
+
       this.imGuiLayer.update(dt, currentScene);
       glfwSwapBuffers(glfwWindow);
 
