@@ -162,7 +162,7 @@ public class Window {
 
       // this.frameBuffer.unbind();
 
-      this.imGuiLayer.update(dt, currentScene);
+      // this.imGuiLayer.update(dt, currentScene);
       glfwSwapBuffers(glfwWindow);
 
       endTime = (float) glfwGetTime();

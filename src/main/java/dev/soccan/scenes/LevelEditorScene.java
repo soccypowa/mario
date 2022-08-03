@@ -12,6 +12,8 @@ import dev.soccan.jade.Camera;
 import dev.soccan.jade.GameObject;
 import dev.soccan.jade.Prefabs;
 import dev.soccan.jade.Transform;
+import dev.soccan.physics2D.PhysicsSystem2D;
+import dev.soccan.physics2D.rigidbody.Rigidbody2D;
 import dev.soccan.renderer.DebugDraw;
 import dev.soccan.util.AssetPool;
 import imgui.ImGui;
@@ -19,9 +21,11 @@ import imgui.ImVec2;
 
 public class LevelEditorScene extends Scene {
 
-    private GameObject obj1;
     private SpriteSheet sprites;
     GameObject levelEditorStuff = new GameObject("LevelEditor", new Transform(new Vector2f()), 0);
+    PhysicsSystem2D physics = new PhysicsSystem2D(1.0f / 60.0f, new Vector2f(0, -10));
+    Transform obj1, obj2;
+    Rigidbody2D rb1, rb2;
 
     public LevelEditorScene() {
     }
@@ -29,7 +33,20 @@ public class LevelEditorScene extends Scene {
     @Override
     public void init() {
         levelEditorStuff.addComponent(new MouseControls());
-        levelEditorStuff.addComponent(new GridLines());
+        // levelEditorStuff.addComponent(new GridLines());
+
+        obj1 = new Transform(new Vector2f(100, 500));
+        obj2 = new Transform(new Vector2f(200, 500));
+        rb1 = new Rigidbody2D();
+        rb2 = new Rigidbody2D();
+        rb1.setRawTransform(obj1);
+        rb2.setRawTransform(obj2);
+        rb1.setMass(100.0f);
+        rb2.setMass(200.0f);
+
+        physics.addRigidbody(rb1);
+        physics.addRigidbody(rb2);
+
         loadResources();
         this.camera = new Camera(new Vector2f(-250, 0));
         sprites = AssetPool.getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
@@ -92,6 +109,11 @@ public class LevelEditorScene extends Scene {
         for (GameObject go : this.gameObjects) {
             go.update(dt);
         }
+
+        DebugDraw.addBox2D(obj1.position, new Vector2f(32, 32), 0.0f, new Vector3f(1, 0, 0));
+        DebugDraw.addBox2D(obj2.position, new Vector2f(32, 32), 0.0f, new Vector3f(0, 1, 0));
+        physics.update(dt);
+
         this.renderer.render();
     }
 
