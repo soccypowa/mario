@@ -412,4 +412,8 @@ public class IntersectionDetector2D {
         }
         return result;
     }
+
+    public static Vector2f closestPoint(Vector2f point, Line2D line) {
+        return null;
+    }
 }

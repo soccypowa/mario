@@ -16,6 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
+    <junit.version>5.9.0</junit.version>
     <lwjgl.version>3.3.1</lwjgl.version>
     <joml.version>1.10.4</joml.version>
     <imgui.version>1.86.2</imgui.version>
@@ -125,10 +126,10 @@
       <version>${joml.version}</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 
