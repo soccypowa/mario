@@ -25,7 +25,7 @@ import org.lwjgl.BufferUtils;
 
 public class Texture {
     private String filepath;
-    private int texID;
+    private transient int texID;
     private int width, height;
 
     public Texture() {

@@ -153,14 +153,14 @@ public class Window {
       glClearColor(r, g, b, a);
       glClear(GL_COLOR_BUFFER_BIT);
 
-      this.frameBuffer.bind();
+      // this.frameBuffer.bind();
 
       if (dt >= 0) {
         DebugDraw.draw(); // This makes it behind everything (makes sense)
         currentScene.update(dt); // Because here is where we draw the rest
       }
 
-      this.frameBuffer.unbind();
+      // this.frameBuffer.unbind();
 
       this.imGuiLayer.update(dt, currentScene);
       glfwSwapBuffers(glfwWindow);
