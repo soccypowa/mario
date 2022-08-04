@@ -33,7 +33,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void init() {
         levelEditorStuff.addComponent(new MouseControls());
-        // levelEditorStuff.addComponent(new GridLines());
+        levelEditorStuff.addComponent(new GridLines());
 
         obj1 = new Transform(new Vector2f(100, 500));
         obj2 = new Transform(new Vector2f(200, 500));
@@ -102,17 +102,19 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float dt) {
         levelEditorStuff.update(dt);
-        DebugDraw.addCircle(new Vector2f(x, y), 64, new Vector3f(0, 1, 0), 1);
-        x += 50f * dt;
-        y += 50f * dt;
+        // DebugDraw.addCircle(new Vector2f(x, y), 64, new Vector3f(0, 1, 0), 1);
+        // x += 50f * dt;
+        // y += 50f * dt;
 
         for (GameObject go : this.gameObjects) {
             go.update(dt);
         }
 
-        DebugDraw.addBox2D(obj1.position, new Vector2f(32, 32), 0.0f, new Vector3f(1, 0, 0));
-        DebugDraw.addBox2D(obj2.position, new Vector2f(32, 32), 0.0f, new Vector3f(0, 1, 0));
-        physics.update(dt);
+        // DebugDraw.addBox2D(obj1.position, new Vector2f(32, 32), 0.0f, new Vector3f(1,
+        // 0, 0));
+        // DebugDraw.addBox2D(obj2.position, new Vector2f(32, 32), 0.0f, new Vector3f(0,
+        // 1, 0));
+        // physics.update(dt);
 
         this.renderer.render();
     }

@@ -12,6 +12,7 @@ import imgui.type.ImBoolean;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import dev.soccan.editor.GameViewWindow;
 import dev.soccan.scenes.Scene;
 
 public class ImGuiLayer {
@@ -183,6 +184,7 @@ public class ImGuiLayer {
         setupDockspace();
         currentScene.sceneImGui();
         ImGui.showDemoWindow();
+        GameViewWindow.imgui();
 
         endFrame();
     }
@@ -217,7 +219,7 @@ public class ImGuiLayer {
         ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
         windowFlags |= ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize
                 | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
-        ImGui.begin("Dockspade Demo", new ImBoolean(true), windowFlags);
+        ImGui.begin("Dockspace Demo", new ImBoolean(true), windowFlags);
         ImGui.popStyleVar(2); // Because we pushed 2
 
         // Dockspace
