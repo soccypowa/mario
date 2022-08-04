@@ -1,20 +1,38 @@
 package dev.soccan.editor;
 
+import org.joml.Vector2f;
+
+import dev.soccan.jade.MouseListener;
 import dev.soccan.jade.Window;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 
 public class GameViewWindow {
+    private static float leftX, rightX, topY, bottomY;
+
     public static void imgui() {
         ImGui.begin("Game Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
 
         ImVec2 windowsSize = getLargestSizeForViewport();
-        ImVec2 windowPos = getCenteredPostionForViewport(windowsSize);
+        ImVec2 windowPos = getCenteredPositionForViewport(windowsSize);
 
         ImGui.setCursorPos(windowPos.x, windowPos.y);
+
+        ImVec2 topLeft = new ImVec2();
+        ImGui.getCursorScreenPos(topLeft);
+        topLeft.x -= ImGui.getScrollX();
+        topLeft.y -= ImGui.getScrollY();
+        leftX = topLeft.x;
+        bottomY = topLeft.y;
+        rightX = topLeft.x + windowsSize.x;
+        topY = topLeft.y + windowsSize.y;
+
         int textureId = Window.getFramebuffer().getTextureId();
         ImGui.image(textureId, windowsSize.x, windowsSize.y, 0, 1, 1, 0);
+
+        MouseListener.setGameViewportPos(new Vector2f(topLeft.x, topLeft.y));
+        MouseListener.setGameViewportSize(new Vector2f(windowsSize.x, windowsSize.y));
 
         ImGui.end();
 
@@ -36,16 +54,21 @@ public class GameViewWindow {
         return new ImVec2(aspectWidth, aspectHeight);
     }
 
-    private static ImVec2 getCenteredPostionForViewport(ImVec2 aspectSize) {
+    private static ImVec2 getCenteredPositionForViewport(ImVec2 aspectSize) {
         ImVec2 windowSize = new ImVec2();
         ImGui.getContentRegionAvail(windowSize);
-        windowSize.x -= ImGui.getScrollX();
-        windowSize.y -= ImGui.getScrollY();
 
         float viewportX = (windowSize.x / 2.0f) - (aspectSize.x / 2.0f);
         float viewportY = (windowSize.y / 2.0f) - (aspectSize.y / 2.0f);
 
         return new ImVec2(viewportX + ImGui.getCursorPosX(), viewportY + ImGui.getCursorPosY());
+    }
+
+    public static boolean getWantCaptureMouse() {
+        return MouseListener.getX() >= leftX &&
+                MouseListener.getX() <= rightX &&
+                MouseListener.getY() <= topY &&
+                MouseListener.getY() >= bottomY;
     }
 
 }
