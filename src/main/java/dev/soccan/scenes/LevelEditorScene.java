@@ -50,32 +50,6 @@ public class LevelEditorScene extends Scene {
         loadResources();
         this.camera = new Camera(new Vector2f(-250, 0));
         sprites = AssetPool.getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
-
-        if (levelLoaded) {
-            // if (gameObjects.size() > 0) {
-            // this.activeGameObject = gameObjects.get(1);
-            // }
-            return;
-        }
-
-        // GameObject obj2 = new GameObject("Object 2", new Transform(new Vector2f(400,
-        // 100), new Vector2f(256, 256)), 4);
-        // SpriteRenderer obj2SpriteRenderer = new SpriteRenderer();
-        // Sprite obj2Sprite = new Sprite();
-        // obj2Sprite.setTexture(AssetPool.getTexture("assets/images/blendimage2.png"));
-        // obj2SpriteRenderer.setSprite(obj2Sprite);
-        // obj2.addComponent(obj2SpriteRenderer);
-        // this.addGameObjectToScene(obj2);
-
-        // obj1 = new GameObject("Object 1", new Transform(new Vector2f(200, 100), new
-        // Vector2f(256, 256)), 2);
-        // SpriteRenderer obj1Sprite = new SpriteRenderer();
-        // obj1Sprite.setColor(new Vector4f(1, 0, 0, 1));
-        // obj1.addComponent(obj1Sprite);
-        // obj1.addComponent(new RigidBody());
-        // this.addGameObjectToScene(obj1);
-        // this.activeGameObject = obj1;
-
     }
 
     private void loadResources() {

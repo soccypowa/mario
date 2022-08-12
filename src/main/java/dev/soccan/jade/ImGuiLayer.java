@@ -13,6 +13,8 @@ import imgui.type.ImBoolean;
 import static org.lwjgl.glfw.GLFW.*;
 
 import dev.soccan.editor.GameViewWindow;
+import dev.soccan.editor.PropertiesWindow;
+import dev.soccan.renderer.PickingTexture;
 import dev.soccan.scenes.Scene;
 
 public class ImGuiLayer {
@@ -24,8 +26,13 @@ public class ImGuiLayer {
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
     private final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
 
-    public ImGuiLayer(long glfwWindow) {
+    private GameViewWindow gameViewWindow;
+    private PropertiesWindow propertiesWindow;
+
+    public ImGuiLayer(long glfwWindow, PickingTexture pickingTexture) {
         this.glfwWindow = glfwWindow;
+        this.gameViewWindow = new GameViewWindow();
+        this.propertiesWindow = new PropertiesWindow(pickingTexture);
     }
 
     // Initialize Dear ImGui.
@@ -122,7 +129,7 @@ public class ImGuiLayer {
 
             io.setMouseDown(mouseDown);
 
-            if (!io.getWantCaptureMouse() || GameViewWindow.getWantCaptureMouse()) {
+            if (!io.getWantCaptureMouse() || gameViewWindow.getWantCaptureMouse()) {
                 MouseListener.mouseButtonCallback(w, button, action, mods);
             }
             if (!io.getWantCaptureMouse() && mouseDown[1]) {
@@ -182,9 +189,11 @@ public class ImGuiLayer {
     public void update(float dt, Scene currentScene) {
         startFrame(dt);
         setupDockspace();
-        currentScene.sceneImGui();
+        currentScene.imgui();
         ImGui.showDemoWindow();
-        GameViewWindow.imgui();
+        gameViewWindow.imgui();
+        propertiesWindow.update(dt, currentScene);
+        propertiesWindow.imgui();
 
         endFrame();
     }
