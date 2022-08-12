@@ -5,9 +5,13 @@ import org.lwjgl.opengl.GL;
 
 import dev.soccan.renderer.DebugDraw;
 import dev.soccan.renderer.FrameBuffer;
+import dev.soccan.renderer.PickingTexture;
+import dev.soccan.renderer.Renderer;
+import dev.soccan.renderer.Shader;
 import dev.soccan.scenes.LevelEditorScene;
 import dev.soccan.scenes.LevelScene;
 import dev.soccan.scenes.Scene;
+import dev.soccan.util.AssetPool;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -21,6 +25,7 @@ public class Window {
     private long glfwWindow;
     private ImGuiLayer imGuiLayer;
     private FrameBuffer frameBuffer;
+    private PickingTexture pickingTexture;
 
     public float r, g, b, a;
 
@@ -112,10 +117,10 @@ public class Window {
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
-        // glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
-        // Window.setWidth(newWidth);
-        // Window.setHeight(newHeight);
-        // });
+        glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
+            Window.setWidth(newWidth);
+            Window.setHeight(newHeight);
+        });
 
         // Make OpenGL the context current
         glfwMakeContextCurrent(glfwWindow);
@@ -135,6 +140,8 @@ public class Window {
 
         // FIXME: Will in the future query to get this size automatically
         this.frameBuffer = new FrameBuffer(3840, 2160);
+        // This should be same size
+        this.pickingTexture = new PickingTexture(3840, 2160);
         glViewport(0, 0, 3840, 2160);
 
         Window.changeScene(0);
@@ -145,10 +152,33 @@ public class Window {
         float endTime;
         float dt = -1.0f;
 
+        Shader defaultShader = AssetPool.getShader("assets/shaders/default.glsl");
+        Shader pickingShader = AssetPool.getShader("assets/shaders/pickingShader.glsl");
+
         while (!glfwWindowShouldClose(glfwWindow)) {
             // Poll events
             glfwPollEvents();
 
+            // Render pass . Render to picking texture
+            glDisable(GL_BLEND);
+            pickingTexture.enableWriting();
+            glViewport(0, 0, 3840, 2160);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            Renderer.bindShader(pickingShader);
+            currentScene.render();
+
+            if (MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+                int x = (int) MouseListener.getScreenX();
+                int y = (int) MouseListener.getScreenY();
+                System.out.println(pickingTexture.readPixel(x, y));
+            }
+
+            pickingTexture.disableWriting();
+            glEnable(GL_BLEND);
+
+            // Render pass 2. Render actual game
             DebugDraw.beginFrame();
 
             this.frameBuffer.bind();
@@ -157,7 +187,9 @@ public class Window {
 
             if (dt >= 0) {
                 DebugDraw.draw(); // This makes it behind everything (makes sense)
+                Renderer.bindShader(defaultShader);
                 currentScene.update(dt); // Because here is where we draw the rest
+                currentScene.render();
             }
 
             this.frameBuffer.unbind();

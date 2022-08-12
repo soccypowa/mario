@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -51,6 +53,8 @@ public abstract class Scene {
     }
 
     public abstract void update(float dt);
+
+    public abstract void render();
 
     public Camera camera() {
         return this.camera;

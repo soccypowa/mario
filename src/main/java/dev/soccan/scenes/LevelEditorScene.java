@@ -116,7 +116,12 @@ public class LevelEditorScene extends Scene {
         // 1, 0));
         // physics.update(dt);
 
+    }
+
+    @Override
+    public void render() {
         this.renderer.render();
+
     }
 
     @Override
