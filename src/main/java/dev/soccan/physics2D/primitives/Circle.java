@@ -4,7 +4,7 @@ import org.joml.Vector2f;
 
 import dev.soccan.physics2D.rigidbody.Rigidbody2D;
 
-public class Circle {
+public class Circle extends Collider2D {
     private float radius = 1.0f;
     private Rigidbody2D rigidbody = null;
 
@@ -20,7 +20,7 @@ public class Circle {
         this.radius = radius;
     }
 
-    public void serRigidBody(Rigidbody2D rigidbody) {
+    public void setRigidBody(Rigidbody2D rigidbody) {
         this.rigidbody = rigidbody;
     }
 

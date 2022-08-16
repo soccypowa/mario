@@ -3,8 +3,18 @@ package dev.soccan.physics2D.rigidbody;
 import org.joml.Vector2f;
 
 import dev.soccan.physics2D.primitives.Circle;
+import dev.soccan.physics2D.primitives.Collider2D;
 
 public class Collisions {
+    public static CollisionManifold findCollisionFeatures(Collider2D c1, Collider2D c2) {
+        if (c1 instanceof Circle && c2 instanceof Circle) {
+            return findCollisionFeatures((Circle) c1, (Circle) c2);
+        } else {
+            assert false : "Unknown collider '" + c1.getClass() + "' vs '" + c2.getClass() + "'";
+        }
+        return null;
+    }
+
     public static CollisionManifold findCollisionFeatures(Circle a, Circle b) {
         CollisionManifold result = new CollisionManifold();
         float sumRadii = a.getRadius() + b.getRadius();

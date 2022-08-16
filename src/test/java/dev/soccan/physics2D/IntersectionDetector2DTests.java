@@ -91,7 +91,7 @@ public class IntersectionDetector2DTests {
         Circle circle = new Circle();
         circle.setRadius(5f);
         Rigidbody2D rigidbody = new Rigidbody2D();
-        circle.serRigidBody(rigidbody);
+        circle.setRigidBody(rigidbody);
 
         Vector2f p1 = new Vector2f(3, -2);
         Vector2f p2 = new Vector2f(-4.9f, 0);
@@ -106,7 +106,7 @@ public class IntersectionDetector2DTests {
         Circle circle = new Circle();
         circle.setRadius(5f);
         Rigidbody2D rigidbody = new Rigidbody2D();
-        circle.serRigidBody(rigidbody);
+        circle.setRigidBody(rigidbody);
 
         Vector2f point = new Vector2f(-6, -6);
 
@@ -119,7 +119,7 @@ public class IntersectionDetector2DTests {
         circle.setRadius(5f);
         Rigidbody2D rigidbody = new Rigidbody2D();
         rigidbody.setTransform(new Vector2f(10));
-        circle.serRigidBody(rigidbody);
+        circle.setRigidBody(rigidbody);
 
         Vector2f point = new Vector2f(-4.9f + 10, 0 + 10);
 
@@ -132,7 +132,7 @@ public class IntersectionDetector2DTests {
         circle.setRadius(5f);
         Rigidbody2D rigidbody = new Rigidbody2D();
         rigidbody.setTransform(new Vector2f(10));
-        circle.serRigidBody(rigidbody);
+        circle.setRigidBody(rigidbody);
 
         Vector2f point = new Vector2f(-6 + 10, -6 + 10);
 

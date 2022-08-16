@@ -1,9 +1,11 @@
 package dev.soccan.physics2D.rigidbody;
 
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 import dev.soccan.components.Component;
 import dev.soccan.jade.Transform;
+import dev.soccan.physics2D.primitives.Collider2D;
 
 public class Rigidbody2D extends Component {
     private Transform rawTransform;
@@ -19,7 +21,12 @@ public class Rigidbody2D extends Component {
     private float linearDamping = 0.0f;
     private float angularDamping = 0.0f;
 
+    // Coefficient of restitution
+    private float cor = 1.0f;
+
     private boolean fixedRotation = false;
+
+    private Collider2D collider;
 
     public void physicsUpdate(float dt) {
         if (this.mass == 0.0f) {
@@ -84,4 +91,35 @@ public class Rigidbody2D extends Component {
         this.forceAccum.add(force);
     }
 
+    public Collider2D getCollider() {
+        return this.collider;
+    }
+
+    public void setCollider(Collider2D collider) {
+        this.collider = collider;
+    }
+
+    public boolean hasInfiniteMass() {
+        return this.mass == 0.0f;
+    }
+
+    public float getInverseMass() {
+        return this.inverseMass;
+    }
+
+    public void setVelocity(Vector2f velocity) {
+        this.linearVelocity.set(velocity);
+    }
+
+    public Vector2fc getVelocity() {
+        return this.linearVelocity;
+    }
+
+    public float getCor() {
+        return cor;
+    }
+
+    public void setCor(float cor) {
+        this.cor = cor;
+    }
 }
