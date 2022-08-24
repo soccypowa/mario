@@ -2,6 +2,7 @@ package dev.soccan.editor;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
+import dev.soccan.components.NonPickable;
 import dev.soccan.jade.GameObject;
 import dev.soccan.jade.MouseListener;
 import dev.soccan.renderer.PickingTexture;
@@ -27,7 +28,12 @@ public class PropertiesWindow {
             int x = (int) MouseListener.getScreenX();
             int y = (int) MouseListener.getScreenY();
             int gameObjectId = pickingTexture.readPixel(x, y);
-            activeGameObject = currentScene.getGameObject(gameObjectId);
+            GameObject pickedObject = currentScene.getGameObject(gameObjectId);
+            if (pickedObject != null && pickedObject.getComponent(NonPickable.class) == null) {
+                activeGameObject = pickedObject;
+            } else if (pickedObject == null && !MouseListener.isDraging()) {
+                activeGameObject = null;
+            }
             this.debounce = 0.2f;
         }
     }

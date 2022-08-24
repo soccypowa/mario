@@ -5,8 +5,10 @@ import org.joml.Vector3f;
 import org.lwjgl.system.windows.WinBase;
 
 import dev.soccan.components.EditorCamera;
+import dev.soccan.components.GizmoSystem;
 import dev.soccan.components.GridLines;
 import dev.soccan.components.MouseControls;
+import dev.soccan.components.ScaleGizmo;
 import dev.soccan.components.Sprite;
 import dev.soccan.components.SpriteRenderer;
 import dev.soccan.components.SpriteSheet;
@@ -44,8 +46,7 @@ public class LevelEditorScene extends Scene {
         levelEditorStuff.addComponent(new MouseControls());
         levelEditorStuff.addComponent(new GridLines());
         levelEditorStuff.addComponent(new EditorCamera(this.camera));
-        levelEditorStuff.addComponent(new TranslateGizmo(gizmos.getSprite(1),
-                Window.getImguiLayer().getPropertiesWindow()));
+        levelEditorStuff.addComponent(new GizmoSystem(gizmos));
         levelEditorStuff.start();
 
         // obj1 = new Transform(new Vector2f(100, 500));
