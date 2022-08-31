@@ -16,6 +16,7 @@ import dev.soccan.components.ComponentDeserializer;
 import dev.soccan.jade.Camera;
 import dev.soccan.jade.GameObject;
 import dev.soccan.jade.GameObjectDeserializer;
+import dev.soccan.jade.Transform;
 import dev.soccan.renderer.Renderer;
 
 public abstract class Scene {
@@ -67,6 +68,14 @@ public abstract class Scene {
 
     public void imgui() {
 
+    }
+
+    public GameObject createGameObject(String name) {
+        GameObject go = new GameObject(name);
+        go.addComponent(new Transform());
+        go.transform = go.getComponent(Transform.class);
+
+        return go;
     }
 
     public void saveExit() {
